@@ -8,7 +8,9 @@
 
 [alias]
 	co = checkout
+	can = commit --amend --no-edit
 	g = lg1
+	ll = lg1
 	lg1 = lg1-specific --all
 	lg2 = lg2-specific --all
 	lg3 = lg3-specific --all
