@@ -15,16 +15,16 @@ call plug#begin('~/.vim/plugged')
 " Some color scheme other then default
 " Plug 'arcticicestudio/nord-vim'
 Plug 'Mofiqul/dracula.nvim'
+Plug 'arcticicestudio/nord-vim'
 
 " ===============================================================
 "           Personal plugins            
 " ===============================================================
 
 " ------------------------------------> VIM Enhancements
-Plug 'machakann/vim-highlightedyank'
-Plug 'ciaranm/securemodelines'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'justinmk/vim-sneak'
+" Plug 'ciaranm/securemodelines'
+" Plug 'editorconfig/editorconfig-vim'
+" Plug 'justinmk/vim-sneak'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'akinsho/bufferline.nvim'
@@ -51,6 +51,8 @@ Plug 'hrsh7th/cmp-nvim-lsp' , {'branch': 'main'} " cmp LSP completion
 Plug 'hrsh7th/cmp-path', {'branch': 'main'}  " cmp Path completion
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'} 
 
+Plug 'simrat39/rust-tools.nvim'
+
 Plug 'hrsh7th/cmp-vsnip', {'branch': 'main'} " cmp Snippet completion
 Plug 'hrsh7th/vim-vsnip'
 Plug 'ray-x/lsp_signature.nvim'
@@ -71,6 +73,110 @@ call plug#end()
 set number
 set tabstop=4 shiftwidth=4 expandtab
 colorscheme dracula
+" colorscheme nord
+
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+set signcolumn=yes
+set updatetime=300
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+
+
+" Goto previous/next diagnostic warning/error
+nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
+
+" ---------------------------------------------> rust lang settings
+"
+lua <<EOF
+-- nvim_lsp object
+local nvim_lsp = require'lspconfig'
+
+local opts = {
+    tools = {
+        autoSetHints = true,
+        hover_with_actions = true,
+        runnables = {
+            use_telescope = true
+        },
+        inlay_hints = {
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
+    },
+
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+    server = {
+        -- on_attach is a callback called when the language server attachs to the buffer
+        -- on_attach = on_attach,
+        settings = {
+            -- to enable rust-analyzer settings visit:
+            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            ["rust-analyzer"] = {
+                -- enable clippy on save
+                checkOnSave = {
+                    command = "clippy"
+                },
+            }
+        }
+    },
+}
+
+require('rust-tools').setup(opts)
+
+EOF
+
+" ---------------------------------------------> 
+" Code navigation shortcuts
+" as found in :help lsp
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+
+" Setup Completion
+" See https://github.com/hrsh7th/nvim-cmp#basic-configuration
+lua <<EOF
+local cmp = require'cmp'
+cmp.setup({
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+})
+EOF
 
 
 " ---------------------------------------------> nvim-tree
@@ -187,17 +293,28 @@ EOF
 lua << EOF
 vim.opt.list = true
 vim.opt.listchars:append("space:⋅")
+vim.opt.termguicolors = true
+vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
 -- vim.opt.listchars:append("eol:↴")
 
 require("indent_blankline").setup {
     show_current_context = true,
     show_current_context_start = true,
     show_end_of_line = false,
+    char = "",
+    char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
+    space_char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
+    show_trailing_blankline_indent = false,
     -- space_char_blankline = " ",
 }
 EOF
-
-
 
 " ---------------------------------------------> feline.nvim
 "

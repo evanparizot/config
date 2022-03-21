@@ -1,8 +1,1 @@
-
-## Fish
-## Rust
-## Python
-## NeoVim
-* Ale
-* Rls
-* 
+configs
