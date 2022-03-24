@@ -182,6 +182,10 @@ EOF
 " ---------------------------------------------> nvim-tree
 "  https://github.com/kyazdani42/nvim-tree.lua
 
+noremap <C-n> :NvimTreeToggle<CR>
+noremap <leader>r :NvimTreeRefresh<CR>
+
+
 lua << EOF
 require('nvim-tree').setup { -- BEGIN_DEFAULT_OPTS
   auto_close = false,
