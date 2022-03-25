@@ -44,6 +44,7 @@ Plug 'junegunn/fzf.vim'
 " ------------------------------------> Language Support
 Plug 'neovim/nvim-lspconfig'
 " Plug 'dense-analysis/ale'
+" Plug 'lervag/vimtex'
 
 Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'} " Autocompletion framework
@@ -72,6 +73,7 @@ call plug#end()
 " Personal Configuration
 set number
 set tabstop=4 shiftwidth=4 expandtab
+set cursorline
 colorscheme dracula
 " colorscheme nord
 
@@ -80,6 +82,11 @@ set shortmess+=c
 set signcolumn=yes
 set updatetime=300
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+
+noremap <silent> <leader>h :bprevious<CR>
+noremap <silent> <leader>l :bnext<CR>
+
+" ===============================================================
 
 
 " Goto previous/next diagnostic warning/error
@@ -184,7 +191,7 @@ EOF
 
 noremap <C-n> :NvimTreeToggle<CR>
 noremap <leader>r :NvimTreeRefresh<CR>
-
+noremap <leader>f :NvimTreeFocus<CR>
 
 lua << EOF
 require('nvim-tree').setup { -- BEGIN_DEFAULT_OPTS
@@ -288,7 +295,12 @@ EOF
 
 set termguicolors
 lua << EOF
-require("bufferline").setup{}
+require("bufferline").setup{
+    options = {
+        mode = "buffers",
+        separator_style = "slant"
+    }
+}
 EOF
 
 
