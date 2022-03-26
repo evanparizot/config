@@ -1,6 +1,5 @@
 " This is n example on how rust-analyzer can be configure using lsp-config
 set shell=/bin/bash
-let mapleader = "\<Space>"
 
 " Prerequisites:
 " - neovim >= 0.5
@@ -74,6 +73,7 @@ call plug#end()
 set number
 set tabstop=4 shiftwidth=4 expandtab
 set cursorline
+set mouse=a
 colorscheme dracula
 " colorscheme nord
 
@@ -83,6 +83,7 @@ set signcolumn=yes
 set updatetime=300
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 
+let mapleader = "\<Space>"
 noremap <silent> <leader>h :bprevious<CR>
 noremap <silent> <leader>l :bnext<CR>
 
