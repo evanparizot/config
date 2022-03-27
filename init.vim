@@ -17,7 +17,7 @@ Plug 'Mofiqul/dracula.nvim'
 Plug 'arcticicestudio/nord-vim'
 
 " ===============================================================
-"           Personal plugins            
+"                       Personal plugins                        
 " ===============================================================
 
 " ------------------------------------> VIM Enhancements
@@ -29,6 +29,8 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'akinsho/bufferline.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'feline-nvim/feline.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'windwp/nvim-autopairs'
 
 " ------------------------------------> GUI Enhancements
 " Plug 'itchyny/lightline.vim'
@@ -86,6 +88,7 @@ autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 let mapleader = "\<Space>"
 noremap <silent> <leader>h :bprevious<CR>
 noremap <silent> <leader>l :bnext<CR>
+" noremap <leader>t :set ts=2 noet <bar> retab! <bar> set et ts=4 <bar> retab <CR>
 
 " ===============================================================
 
@@ -101,36 +104,36 @@ lua <<EOF
 local nvim_lsp = require'lspconfig'
 
 local opts = {
-    tools = {
-        autoSetHints = true,
-        hover_with_actions = true,
-        runnables = {
-            use_telescope = true
-        },
-        inlay_hints = {
-            show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-        },
-    },
-
-    -- all the opts to send to nvim-lspconfig
-    -- these override the defaults set by rust-tools.nvim
-    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-    server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
-        settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust-analyzer"] = {
-                -- enable clippy on save
-                checkOnSave = {
-                    command = "clippy"
+        tools = {
+                autoSetHints = true,
+                hover_with_actions = true,
+                runnables = {
+                        use_telescope = true
                 },
-            }
-        }
-    },
+                inlay_hints = {
+                        show_parameter_hints = false,
+                        parameter_hints_prefix = "",
+                        other_hints_prefix = "",
+                },
+        },
+
+        -- all the opts to send to nvim-lspconfig
+        -- these override the defaults set by rust-tools.nvim
+        -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+        server = {
+                -- on_attach is a callback called when the language server attachs to the buffer
+                -- on_attach = on_attach,
+                settings = {
+                        -- to enable rust-analyzer settings visit:
+                        -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+                        ["rust-analyzer"] = {
+                                -- enable clippy on save
+                                checkOnSave = {
+                                        command = "clippy"
+                                },
+                        }
+                }
+        },
 }
 
 require('rust-tools').setup(opts)
@@ -141,48 +144,48 @@ EOF
 " Code navigation shortcuts
 " as found in :help lsp
 nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> K         <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD        <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> 1gD       <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr        <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0        <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW        <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd        <cmd>lua vim.lsp.buf.definition()<CR>
 
 " Setup Completion
 " See https://github.com/hrsh7th/nvim-cmp#basic-configuration
 lua <<EOF
 local cmp = require'cmp'
 cmp.setup({
-  snippet = {
-    expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-  mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    -- Add tab support
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    ['<Tab>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
-    })
-  },
+    snippet = {
+        expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body)
+        end,
+    },
+    mapping = {
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        -- Add tab support
+        ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+        ['<Tab>'] = cmp.mapping.select_next_item(),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true,
+        })
+    },
 
-  -- Installed sources
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'vsnip' },
-    { name = 'path' },
-    { name = 'buffer' },
-  },
+    -- Installed sources
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'vsnip' },
+        { name = 'path' },
+        { name = 'buffer' },
+    },
 })
 EOF
 
@@ -196,98 +199,98 @@ noremap <leader>f :NvimTreeFocus<CR>
 
 lua << EOF
 require('nvim-tree').setup { -- BEGIN_DEFAULT_OPTS
-  auto_close = false,
-  auto_reload_on_write = true,
-  disable_netrw = false,
-  hide_root_folder = false,
-  hijack_cursor = false,
-  hijack_netrw = true,
-  hijack_unnamed_buffer_when_opening = false,
-  ignore_buffer_on_setup = false,
-  open_on_setup = false,
-  open_on_tab = false,
-  sort_by = "name",
-  update_cwd = false,
-  view = {
-    width = 30,
-    height = 30,
-    side = "left",
-    preserve_window_proportions = false,
-    number = false,
-    relativenumber = false,
-    signcolumn = "yes",
-    mappings = {
-      custom_only = false,
-      list = {
-        -- user mappings go here
-      },
-    },
-  },
-  hijack_directories = {
-    enable = true,
-    auto_open = true,
-  },
-  update_focused_file = {
-    enable = false,
+    auto_close = false,
+    auto_reload_on_write = true,
+    disable_netrw = false,
+    hide_root_folder = false,
+    hijack_cursor = false,
+    hijack_netrw = true,
+    hijack_unnamed_buffer_when_opening = false,
+    ignore_buffer_on_setup = false,
+    open_on_setup = false,
+    open_on_tab = false,
+    sort_by = "name",
     update_cwd = false,
-    ignore_list = {},
-  },
-  ignore_ft_on_setup = {},
-  system_open = {
-    cmd = nil,
-    args = {},
-  },
-  diagnostics = {
-    enable = false,
-    show_on_dirs = false,
-    icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
-    },
-  },
-  filters = {
-    dotfiles = false,
-    custom = {},
-    exclude = {},
-  },
-  git = {
-    enable = true,
-    ignore = true,
-    timeout = 400,
-  },
-  actions = {
-    change_dir = {
-      enable = true,
-      global = false,
-    },
-    open_file = {
-      quit_on_open = false,
-      resize_window = false,
-      window_picker = {
-        enable = true,
-        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
-        exclude = {
-          filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
-          buftype = { "nofile", "terminal", "help" },
+    view = {
+        width = 30,
+        height = 30,
+        side = "left",
+        preserve_window_proportions = false,
+        number = false,
+        relativenumber = false,
+        signcolumn = "yes",
+        mappings = {
+            custom_only = false,
+            list = {
+                -- user mappings go here
+            },
         },
-      },
     },
-  },
-  trash = {
-    cmd = "trash",
-    require_confirm = true,
-  },
-  log = {
-    enable = false,
-    truncate = false,
-    types = {
-      all = false,
-      config = false,
-      git = false,
+    hijack_directories = {
+        enable = true,
+        auto_open = true,
     },
-  },
+    update_focused_file = {
+        enable = false,
+        update_cwd = false,
+        ignore_list = {},
+    },
+    ignore_ft_on_setup = {},
+    system_open = {
+        cmd = nil,
+        args = {},
+    },
+    diagnostics = {
+        enable = false,
+        show_on_dirs = false,
+        icons = {
+            hint = "",
+            info = "",
+            warning = "",
+            error = "",
+        },
+    },
+    filters = {
+        dotfiles = false,
+        custom = {},
+        exclude = {},
+    },
+    git = {
+        enable = true,
+        ignore = true,
+        timeout = 400,
+    },
+    actions = {
+        change_dir = {
+            enable = true,
+            global = false,
+        },
+        open_file = {
+            quit_on_open = false,
+            resize_window = false,
+            window_picker = {
+                enable = true,
+                chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+                exclude = {
+                    filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+                    buftype = { "nofile", "terminal", "help" },
+                },
+            },
+        },
+    },
+    trash = {
+        cmd = "trash",
+        require_confirm = true,
+    },
+    log = {
+        enable = false,
+        truncate = false,
+        types = {
+            all = false,
+            config = false,
+            git = false,
+        },
+    },
 } -- END_DEFAULT_OPTS
 EOF
 
@@ -297,37 +300,48 @@ EOF
 set termguicolors
 lua << EOF
 require("bufferline").setup{
-    options = {
-        mode = "buffers",
-        separator_style = "slant"
-    }
+        options = {
+                mode = "buffers",
+                separator_style = "slant"
+        }
 }
 EOF
 
+" ---------------------------------------------> treesitter
+lua << EOF
+require("nvim-treesitter.configs").setup {
+        ensure_installed = "maintained",
+        highlight = {
+                enable = true,
+                disable = {"rust", "c", "java"}, 
+                additional_vim_regex_highlighting = false,
+        }, 
+        indent = {
+                enable = false
+        }
+}
+
+EOF
+
+" ---------------------------------------------> autopairs
+lua << EOF
+require("nvim-autopairs").setup {}
+
+EOF
 
 " ---------------------------------------------> indent-blankline.nvim
 "  https://github.com/lukas-reineke/indent-blankline.nvim
 lua << EOF
 vim.opt.list = true
 vim.opt.listchars:append("space:⋅")
-vim.opt.termguicolors = true
-vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
 -- vim.opt.listchars:append("eol:↴")
+vim.opt.termguicolors = true
+vim.cmd [[highlight context guibg=#61AFEF gui=nocombine]]
 
 require("indent_blankline").setup {
     show_current_context = true,
     show_current_context_start = true,
-    show_end_of_line = false,
-    char = "",
-    char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-    },
-    space_char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-    },
+    show_end_of_line = true,
     show_trailing_blankline_indent = false,
     -- space_char_blankline = " ",
 }
