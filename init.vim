@@ -1,24 +1,8 @@
-" This is n example on how rust-analyzer can be configure using lsp-config
 set shell=/bin/bash
-
-" Prerequisites:
-" - neovim >= 0.5
-" - rust-analyzer: https://rust-analyzer.github.io/manual.html#rust-analyzer-language-server-binary
-
-" Steps:
-" - :PlugInstall
-" - Restart
-
 call plug#begin('~/.vim/plugged')
 
-" Some color scheme other then default
-" Plug 'arcticicestudio/nord-vim'
 Plug 'Mofiqul/dracula.nvim'
 Plug 'arcticicestudio/nord-vim'
-
-" ===============================================================
-"                       Personal plugins                        
-" ===============================================================
 
 " ------------------------------------> VIM Enhancements
 " Plug 'ciaranm/securemodelines'
@@ -57,8 +41,8 @@ Plug 'simrat39/rust-tools.nvim'
 
 Plug 'hrsh7th/cmp-vsnip', {'branch': 'main'} " cmp Snippet completion
 Plug 'hrsh7th/vim-vsnip'
-Plug 'ray-x/lsp_signature.nvim'
- 
+" Plug 'ray-x/lsp_signature.nvim'
+
 " Plug 'cespare/vim-toml'
 " Plug 'stephpy/vim-yaml'
 " Plug 'rust-lang/rust.vim'
@@ -67,11 +51,12 @@ Plug 'ray-x/lsp_signature.nvim'
 " Plug 'godlygeek/tabular'
 " Plug 'plasticboy/vim-markdown'
 
-" ===============================================================
-
 call plug#end()
 
+
+" ===============================================================
 " Personal Configuration
+" ===============================================================
 set number
 set tabstop=4 shiftwidth=4 expandtab
 set cursorline
@@ -83,22 +68,22 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 set signcolumn=yes
 set updatetime=300
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+" autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 
 let mapleader = "\<Space>"
 noremap <silent> <leader>h :bprevious<CR>
 noremap <silent> <leader>l :bnext<CR>
 " noremap <leader>t :set ts=2 noet <bar> retab! <bar> set et ts=4 <bar> retab <CR>
 
-" ===============================================================
-
-
 " Goto previous/next diagnostic warning/error
 nnoremap <silent> g[ <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> g] <cmd>lua vim.diagnostic.goto_next()<CR>
 
-" ---------------------------------------------> rust lang settings
-"
+
+" ===============================================================
+" Rust Language Settings 
+" ===============================================================
+
 lua <<EOF
 -- nvim_lsp object
 local nvim_lsp = require'lspconfig'
@@ -140,7 +125,6 @@ require('rust-tools').setup(opts)
 
 EOF
 
-" ---------------------------------------------> 
 " Code navigation shortcuts
 " as found in :help lsp
 nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
@@ -190,7 +174,9 @@ cmp.setup({
 EOF
 
 
-" ---------------------------------------------> nvim-tree
+" ===============================================================
+" nvim-tree configuration
+" ===============================================================
 "  https://github.com/kyazdani42/nvim-tree.lua
 
 noremap <C-n> :NvimTreeToggle<CR>
@@ -294,8 +280,11 @@ require('nvim-tree').setup { -- BEGIN_DEFAULT_OPTS
 } -- END_DEFAULT_OPTS
 EOF
 
-" ---------------------------------------------> bufferline.nvim
-"  https://github.com/akinsho/bufferline.nvim
+
+" ===============================================================
+" bufferline configuration
+" ===============================================================
+" https://github.com/akinsho/bufferline.nvim
 
 set termguicolors
 lua << EOF
@@ -307,7 +296,12 @@ require("bufferline").setup{
 }
 EOF
 
-" ---------------------------------------------> treesitter
+
+" ===============================================================
+" nvim-treesitter configuration
+" ===============================================================
+" https://github.com/nvim-treesitter/nvim-treesitter
+
 lua << EOF
 require("nvim-treesitter.configs").setup {
         ensure_installed = "maintained",
@@ -323,14 +317,22 @@ require("nvim-treesitter.configs").setup {
 
 EOF
 
-" ---------------------------------------------> autopairs
+
+" ===============================================================
+" Autopairs configuration
+" ===============================================================
+" https://github.com/windwp/nvim-autopairs
+
 lua << EOF
 require("nvim-autopairs").setup {}
-
 EOF
 
-" ---------------------------------------------> indent-blankline.nvim
+
+" ===============================================================
+" indent-blankline configuration 
+" ===============================================================
 "  https://github.com/lukas-reineke/indent-blankline.nvim
+
 lua << EOF
 vim.opt.list = true
 vim.opt.listchars:append("space:⋅")
@@ -347,8 +349,13 @@ require("indent_blankline").setup {
 }
 EOF
 
-" ---------------------------------------------> feline.nvim
-"
+
+" ===============================================================
+" Feline configuration 
+" ===============================================================
+" https://github.com/feline-nvim/feline.nvim
+
 lua << EOF
-require('feline').setup()
+require('feline').setup{}
 EOF
+
