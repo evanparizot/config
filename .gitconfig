@@ -9,6 +9,7 @@
     editor = nvim
 [alias]
     s = status
+    st = status
     co = checkout
     can = commit --amend --no-edit
     acan = "!git add -A && git can"

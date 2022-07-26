@@ -4,6 +4,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'Mofiqul/dracula.nvim'
 Plug 'arcticicestudio/nord-vim'
 
+
 " ------------------------------------> VIM Enhancements
 " Plug 'ciaranm/securemodelines'
 " Plug 'editorconfig/editorconfig-vim'
@@ -15,6 +16,7 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'feline-nvim/feline.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'windwp/nvim-autopairs'
+Plug 'tpope/vim-fugitive'
 
 " ------------------------------------> GUI Enhancements
 " Plug 'itchyny/lightline.vim'
