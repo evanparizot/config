@@ -43,6 +43,7 @@ Plug 'simrat39/rust-tools.nvim'
 
 Plug 'hrsh7th/cmp-vsnip', {'branch': 'main'} " cmp Snippet completion
 Plug 'hrsh7th/vim-vsnip'
+Plug 'tpope/vim-fugitive'
 " Plug 'ray-x/lsp_signature.nvim'
 
 " Plug 'cespare/vim-toml'
