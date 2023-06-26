@@ -1,8 +1,10 @@
 set shell=/bin/bash
 call plug#begin('~/.vim/plugged')
 
+" ------------------------------------> Color Scheme Imports 
 Plug 'Mofiqul/dracula.nvim'
 Plug 'arcticicestudio/nord-vim'
+Plug 'junegunn/seoul256.vim'
 
 
 " ------------------------------------> VIM Enhancements
@@ -66,6 +68,8 @@ set cursorline
 set mouse=a
 colorscheme dracula
 " colorscheme nord
+" colorscheme seoul256
+" set background=dark
 
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
