@@ -8,6 +8,7 @@
 [core]
     editor = nvim
 [alias]
+    b = branch
     s = status
     st = status
     co = checkout
